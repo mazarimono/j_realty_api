@@ -3,6 +3,10 @@ import json
 import pandas as pd
 import requests
 
+CITYSEARCH_URL= 'https://www.land.mlit.go.jp/webland/api/CitySearch'
+TRADESEARCH_URL = 'https://www.land.mlit.go.jp/webland/api/TradeListSearch'
+PREF_CODE_JSON_PATH = './data/japan-pref-code.json'
+
 
 @dataclass
 class CityCode:
@@ -14,21 +18,19 @@ class CityCode:
     '''
 
     pref_name: str
-    base_path: str = 'https://www.land.mlit.go.jp/webland/api/CitySearch'
+    base_path: str = CITYSEARCH_URL
 
     @property
     def pref_code(self) -> str:
         '''
         都道府県名からコードを探す
         '''
-        with open('./data/japan-pref-code.json', 'r', encoding='utf-8') as f:
+        with open(PREF_CODE_JSON_PATH, 'r', encoding='utf-8') as f:
             pref_code = json.load(f)
         for p_name, p_code in pref_code.items():
             if p_name.startswith(self.pref_name):
                 return p_code
-            else:
-                pass
-        raise Exception('There was no pref_code corresponding to the pref_name.')
+        raise Exception(f'No pref_code found for {self.pref_name}')
     
 
     @property
@@ -38,22 +40,14 @@ class CityCode:
     
 
     def city_code(self, city_name: str):
-        for d in self.city_json['data']:
+        for d in self.city_json.get('data', []):
             if d['name'].startswith(city_name):
                 return d['id']
-        else:
-            pass
-        raise Exception('There was no city_code corresponding to the city_name.')
+        raise Exception(f'No city_code found for {city_name}.')
 
 
 @dataclass
 class PropTransactions:
-
-    area: str
-    city: str
-    from_dt: int = 20221
-    to_dt: int = 20223
-    base_url: str = 'https://www.land.mlit.go.jp/webland/api/TradeListSearch'
 
     '''
     area: str
@@ -69,6 +63,13 @@ class PropTransactions:
         ※20053（平成17年第３四半期）より指定可能    
     '''
 
+    area: str
+    city: str
+    from_dt: int = 20221
+    to_dt: int = 20223
+    base_url: str = TRADESEARCH_URL
+
+
     def get_data(self):
         params = {
             'from': self.from_dt,
@@ -81,7 +82,7 @@ class PropTransactions:
             df = pd.DataFrame(r.json()['data'])
             return df
         else:
-            raise Exception('ちょっとおかしいようです')
+            raise Exception(f'Status_code: {r.status_code}')
 
 
 
