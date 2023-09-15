@@ -7,5 +7,6 @@ setup(
     install_requires=[
         'pandas',
         'requests'
-    ]
+    ],
+    include_package_data=True
 )

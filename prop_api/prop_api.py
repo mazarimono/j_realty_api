@@ -2,11 +2,11 @@ from dataclasses import dataclass
 import json
 import pandas as pd
 import requests
-import os
+import pkg_resources
 
 CITYSEARCH_URL= 'https://www.land.mlit.go.jp/webland/api/CitySearch'
 TRADESEARCH_URL = 'https://www.land.mlit.go.jp/webland/api/TradeListSearch'
-PREF_CODE_JSON_PATH = './data/japan-pref-code.json'
+PREF_CODE_JSON_PATH = pkg_resources.resource_filename('prop_api', 'data/japan-pref-code.json')
 
 
 @dataclass
