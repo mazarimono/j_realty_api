@@ -2,6 +2,7 @@ import json
 import math
 from dataclasses import dataclass
 
+import numpy as np
 import pandas as pd
 import pkg_resources
 import requests
@@ -83,6 +84,7 @@ class PropTransactions:
         if r.status_code == 200:
             df = pd.DataFrame(r.json()["data"])
             df = self._prepro_df(df)
+            df['BuildingYear'] = df['BuildingYear'].map(self._wareki_to_seireki)
             return df
         else:
             raise Exception(f"Status_code: {r.status_code}")
@@ -121,6 +123,25 @@ class PropTransactions:
             df[col] = df[col].astype(float, errors="ignore")
 
         return df
+
+    def _wareki_to_seireki(self, x) -> int:
+        if not x or isinstance(x, float) and np.isnan(x):
+            return np.nan
+        try:
+            if x[:2] == '令和':
+                year = int(x[2:-1])
+                wareki = 2018 + year
+                return wareki
+            elif x[:2] == '平成':
+                year = int(x[2:-1])
+                wareki = 1988 + year
+                return wareki
+            elif x[:2] == '昭和':
+                year = int(x[2:-1])
+                wareki = 1925 + year
+                return wareki
+        except ValueError:
+            return np.nan
 
 
 if __name__ == "__main__":
