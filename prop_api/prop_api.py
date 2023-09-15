@@ -4,10 +4,9 @@ import pandas as pd
 import requests
 import os
 
-current_dir = os.getcwd()
 CITYSEARCH_URL= 'https://www.land.mlit.go.jp/webland/api/CitySearch'
 TRADESEARCH_URL = 'https://www.land.mlit.go.jp/webland/api/TradeListSearch'
-PREF_CODE_JSON_PATH = os.path.join(current_dir, 'data', 'japan-pref-code.json')
+PREF_CODE_JSON_PATH = './data/japan-pref-code.json')
 
 
 @dataclass
