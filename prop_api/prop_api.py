@@ -1,6 +1,7 @@
 import json
 import math
 from dataclasses import dataclass
+from typing import Union
 
 import numpy as np
 import pandas as pd
@@ -84,7 +85,8 @@ class PropTransactions:
         if r.status_code == 200:
             df = pd.DataFrame(r.json()["data"])
             df = self._prepro_df(df)
-            df['BuildingYear'] = df['BuildingYear'].map(self._wareki_to_seireki)
+            df["BuildingYear"] = df["BuildingYear"].map(self._wareki_to_seireki)
+            df["Period"] = df["Period"].map(self._convert_to_quarter)
             return df
         else:
             raise Exception(f"Status_code: {r.status_code}")
@@ -124,24 +126,30 @@ class PropTransactions:
 
         return df
 
-    def _wareki_to_seireki(self, x) -> int:
+    def _wareki_to_seireki(self, x: Union[str, float]) -> int:
         if not x or isinstance(x, float) and np.isnan(x):
             return np.nan
         try:
-            if x[:2] == '令和':
+            if x[:2] == "令和":
                 year = int(x[2:-1])
                 wareki = 2018 + year
                 return wareki
-            elif x[:2] == '平成':
+            elif x[:2] == "平成":
                 year = int(x[2:-1])
                 wareki = 1988 + year
                 return wareki
-            elif x[:2] == '昭和':
+            elif x[:2] == "昭和":
                 year = int(x[2:-1])
                 wareki = 1925 + year
                 return wareki
         except ValueError:
             return np.nan
+
+    def _convert_to_quarter(self, input_str: str) -> pd.Period:
+        # 年と四半期の情報を抽出
+        year = int(input_str.split("年")[0])
+        quarter = int(input_str.split("第")[1][0])
+        return pd.Period(f"{year}Q{quarter}")
 
 
 if __name__ == "__main__":
