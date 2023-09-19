@@ -1,1 +1,1 @@
-include prop_api/data/*.json
+include j_realty_api/data/*.json

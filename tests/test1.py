@@ -1,2 +1,2 @@
-from prop_api import prop_api
+from j_realty_api import prop_api
 

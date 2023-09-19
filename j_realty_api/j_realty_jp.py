@@ -8,6 +8,9 @@ import pandas as pd
 import pkg_resources
 import requests
 
+# API from 国土交通省
+# web: https://www.land.mlit.go.jp/webland/api.html
+
 CITYSEARCH_URL = "https://www.land.mlit.go.jp/webland/api/CitySearch"
 TRADESEARCH_URL = "https://www.land.mlit.go.jp/webland/api/TradeListSearch"
 PREF_CODE_JSON_PATH = pkg_resources.resource_filename(
@@ -65,7 +68,7 @@ class PropTransactions:
         形式はYYYYN（数字5桁）
         YYYY … 西暦
         N … 1～4（1:1月～3月、2:4月～6月、3:7月～10月、4:11月～12月）
-        ※20053（平成17年第３四半期）より指定可能
+        ※20053（平成17年第3四半期）より指定可能
     """
 
     area: str
