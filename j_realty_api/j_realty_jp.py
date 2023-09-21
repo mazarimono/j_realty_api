@@ -58,9 +58,9 @@ class CityCode:
 class PropTransactions:
 
     """
-    area: str
+    pref_code: str
         都道府県コード
-    city: str
+    city_code: str
         市区町村コード
     from_dt: str
     to_dt: str
@@ -71,8 +71,8 @@ class PropTransactions:
         ※20053（平成17年第3四半期）より指定可能
     """
 
-    area: str
-    city: str
+    pref_code: str
+    city_code: str
     from_dt: int = 20221
     to_dt: int = 20223
     base_url: str = TRADESEARCH_URL
@@ -81,8 +81,8 @@ class PropTransactions:
         params = {
             "from": self.from_dt,
             "to": self.to_dt,
-            "area": self.area,
-            "city": self.city,
+            "area": self.pref_code,
+            "city": self.city_code,
         }
         r = requests.get(self.base_url, params=params)
         if r.status_code == 200:

@@ -58,9 +58,8 @@ class CityCode:
 @dataclass
 class PropTransactions:
     
-    area: str
-    area: str
-    city: str
+    pref_code: str
+    city_code: str
     from_dt: int = 20221
     to_dt: int = 20223
     base_url: str = TRADESEARCH_EN_URL
@@ -69,8 +68,8 @@ class PropTransactions:
         params = {
             "from": self.from_dt,
             "to": self.to_dt,
-            "area": self.area,
-            "city": self.city,
+            "area": self.pref_code,
+            "city": self.city_code,
         }
         r = requests.get(self.base_url, params=params)
         if r.status_code == 200:
