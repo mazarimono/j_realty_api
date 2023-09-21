@@ -14,7 +14,7 @@ import requests
 CITYSEARCH_URL = "https://www.land.mlit.go.jp/webland/api/CitySearch"
 TRADESEARCH_URL = "https://www.land.mlit.go.jp/webland/api/TradeListSearch"
 PREF_CODE_JSON_PATH = pkg_resources.resource_filename(
-    "prop_api", "data/japan-pref-code.json"
+    "j_realty_jp", "data/pref-code-jp.json"
 )
 
 
