@@ -1,4 +1,7 @@
-import j_realty_api 
+import json
 
-s = j_realty_api.__dict__
-print(s)
+with open('./j_realty_api/data', 'r') as f:
+    data = json.load(f)
+
+print(data)
+

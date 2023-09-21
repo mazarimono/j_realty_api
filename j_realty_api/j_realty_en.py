@@ -37,20 +37,26 @@ class CityCode:
         都道府県名からコードを探す
         """
         with open(EN_PREF_CODE_JSON_PATH, "r", encoding="utf-8") as f:
-            pref_code = json.load(f)
-        for p_name, p_code in pref_code.items():
-            if p_name.startswith(self.pref_name):
+            pref_code_json = json.load(f)
+        for p_name, p_code in pref_code_json.items():
+            if p_name.startswith(self.pref_name.lower()):
                 return p_code
         raise Exception(f"No pref_code found for {self.pref_name}")
 
     @property
     def city_json(self):
         r = requests.get(self.base_path, params={"area": self.pref_code})
-        return r.json()
+        city_json = r.json()
+        new_list = list()
+        for d in city_json['data']:
+            d['name'] = d['name'].lower()
+            new_list.append(d)
+        city_json['data'] = new_list
+        return city_json
 
     def city_code(self, city_name: str):
         for d in self.city_json.get("data", []):
-            if d["name"].startswith(city_name):
+            if d["name"].startswith(city_name.lower()):
                 return d["id"]
         raise Exception(f"No city_code found for {city_name}.")
 
@@ -83,4 +89,5 @@ if __name__ == "__main__":
     k = CityCode("Kyoto")
     pref_code = k.pref_code
     city_code = k.city_code('Kyoto')
-    print(pref_code, city_code)
+    print(pref_code)
+    print(city_code)

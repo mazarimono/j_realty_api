@@ -36,8 +36,8 @@ class CityCode:
         都道府県名からコードを探す
         """
         with open(PREF_CODE_JSON_PATH, "r", encoding="utf-8") as f:
-            pref_code = json.load(f)
-        for p_name, p_code in pref_code.items():
+            pref_code_json = json.load(f)
+        for p_name, p_code in pref_code_json.items():
             if p_name.startswith(self.pref_name):
                 return p_code
         raise Exception(f"No pref_code found for {self.pref_name}")
