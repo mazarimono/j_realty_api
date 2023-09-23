@@ -43,11 +43,17 @@ class CityCode:
         raise Exception(f"No pref_code found for {self.pref_name}")
 
     @property
-    def city_json(self):
+    def city_json(self) -> dict[str]:
+        '''
+        指定した都道府県の市町村コードのJSON
+        '''
         r = requests.get(self.base_path, params={"area": self.pref_code})
         return r.json()
 
-    def city_code(self, city_name: str):
+    def city_code(self, city_name: str) -> str:
+        '''
+        city_nameに対応したcitycodeが返される
+        '''
         for d in self.city_json.get("data", []):
             if d["name"].startswith(city_name):
                 return d["id"]
@@ -58,6 +64,8 @@ class CityCode:
 class PropTransactions:
 
     """
+    APIから各パラメータに見合ったデータを取得する
+
     pref_code: str
         都道府県コード
     city_code: str
@@ -77,7 +85,14 @@ class PropTransactions:
     to_dt: int = 20223
     base_url: str = TRADESEARCH_URL
 
-    def get_data(self):
+    def get_data(self) -> pd.DataFrame:
+        '''
+        指定された都道府県コード、市町村コード、期間の
+        不動産取引価格情報を取得する。
+        データはJSONをDataFrameにして返す。
+        Returns:
+            pd.DataFrame
+        '''
         params = {
             "from": self.from_dt,
             "to": self.to_dt,

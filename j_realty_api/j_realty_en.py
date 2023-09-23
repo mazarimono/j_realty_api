@@ -22,10 +22,10 @@ EN_PREF_CODE_JSON_PATH = pkg_resources.resource_filename(
 class CityCode:
 
     """
-    都道府県名を渡すと、その都道府県の市区町村名とコードの格納された
-    データが返される。
-    市区町村名を指定すると、市区町村コードが返される
-    すべて大文字で入ってきた場合などの対応を考える必要あり。
+    A class that, when given a prefecture name, returns data containing 
+    the names and codes of the municipalities in that prefecture. When a 
+    municipality name is specified, it returns the municipality code. 
+
     """
 
     pref_name: str
@@ -34,7 +34,9 @@ class CityCode:
     @property
     def pref_code(self) -> str:
         """
-        都道府県名からコードを探す
+        search pref_code from JSON with pref_name
+        Returns:
+            str: pref_code
         """
         with open(EN_PREF_CODE_JSON_PATH, "r", encoding="utf-8") as f:
             pref_code_json = json.load(f)
@@ -44,7 +46,12 @@ class CityCode:
         raise Exception(f"No pref_code found for {self.pref_name}")
 
     @property
-    def city_json(self):
+    def city_json(self) -> dict[str]:
+        '''
+        api returns each pref's city_codes json.
+        Returns:
+            Dict[str]: JSON with {'cityname' : 'citycode'}
+        '''
         r = requests.get(self.base_path, params={"area": self.pref_code})
         city_json = r.json()
         new_list = list()
@@ -54,7 +61,17 @@ class CityCode:
         city_json['data'] = new_list
         return city_json
 
-    def city_code(self, city_name: str):
+    def city_code(self, city_name: str) -> str:
+        '''
+        Searches for the city code corresponding to the provided
+        city name from the city_json.
+        
+        Args:
+            city_name str: City name for which to find the city code.
+        Returns:
+            str: city code
+
+        '''
         for d in self.city_json.get("data", []):
             if d["name"].startswith(city_name.lower()):
                 return d["id"]
@@ -63,6 +80,11 @@ class CityCode:
 
 @dataclass
 class PropTransactions:
+
+    '''
+    A class that retrieves property transaction data based on the specified parameters
+    such as prefecture code, city code, and date range from a given API endpoint.
+    '''
     
     pref_code: str
     city_code: str
@@ -71,6 +93,16 @@ class PropTransactions:
     base_url: str = TRADESEARCH_EN_URL
 
     def get_data(self) -> pd.DataFrame:
+        '''
+        Sends a GET request to the API with the specified parameters and retrieves 
+        property transaction data.
+        
+        The method constructs a DataFrame from the received JSON data and returns it.
+        
+        Returns:
+            pd.DataFrame: A DataFrame containing the property transaction data.
+
+        '''
         params = {
             "from": self.from_dt,
             "to": self.to_dt,
@@ -83,7 +115,10 @@ class PropTransactions:
                 df = pd.DataFrame(r.json()["data"])
                 return df
             except KeyError:
-                print('')
+                print(f'''KeyError: The received JSON does not contain the expected "data" key.
+                      pref_code: {self.pref_code}, city_code: {self.city_code}, 
+                      from_dt: {self.from_dt}, to_dt: {self.to_dt}
+                      ''')
         else:
             raise Exception(f"Status_code: {r.status_code}")
 
