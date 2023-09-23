@@ -73,7 +73,7 @@ class PropTransactions:
 
     pref_code: str
     city_code: str
-    from_dt: int = 20221
+    from_dt: int = 20222
     to_dt: int = 20223
     base_url: str = TRADESEARCH_URL
 

@@ -66,11 +66,11 @@ class PropTransactions:
     
     pref_code: str
     city_code: str
-    from_dt: int = 20221
+    from_dt: int = 20222
     to_dt: int = 20223
     base_url: str = TRADESEARCH_EN_URL
 
-    def get_data(self):
+    def get_data(self) -> pd.DataFrame:
         params = {
             "from": self.from_dt,
             "to": self.to_dt,
@@ -79,8 +79,11 @@ class PropTransactions:
         }
         r = requests.get(self.base_url, params=params)
         if r.status_code == 200:
-            df = pd.DataFrame(r.json()["data"])
-            return df
+            try:
+                df = pd.DataFrame(r.json()["data"])
+                return df
+            except KeyError:
+                print('')
         else:
             raise Exception(f"Status_code: {r.status_code}")
 
