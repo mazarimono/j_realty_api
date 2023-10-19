@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "j_realty_api"
+version = "0.1"
+description = "j_realty_api: Knowing the real estate transaction prices in Japan."
+authors= [{name = "HideyukiO", email="hogawa098@gmail.com"}]
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT License" }
+keywords=["japan", "real estate transaction price"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    ]
+dependencies = ["requests", "pandas"]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["j_realty_api/data"]
+
+[project.urls]
+Repository = "https://github.com/mazarimono/j_realty_api"
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "isort",
+    "flake8",
+    "mypy",
+    "pytest",
+]
+

@@ -39,7 +39,7 @@ df = pt.get_data()
 
 ```
 
--日本語
+- 日本語
 - [sample notebook](https://github.com/mazarimono/j_realty_api/tree/main/samples/sample_j_realty_jp.ipynb)
 
 ```python
