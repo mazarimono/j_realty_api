@@ -10,9 +10,6 @@ j_realty_apiは、日本の国土交通省が出している[不動産取引価�
 
 ツールの特徴は、都道府県コードと市町村コードを取得できるツールを加えて、データを探しやすくした点です。
 
-## Where to get it
-The source code is currently hosted on Github at: [https://github.com/mazarimono/j_realty_api](https://github.com/mazarimono/j_realty_api)
-
 ## Installation
 
 - インストール方法
@@ -31,7 +28,7 @@ pip install git+https://github.com/mazarimono/j_realty_api.git
 # English
 from j_realty_api import j_realty_en as jrn
 
-j = j_realty_en.CityCode('Kyoto')
+j = jrn.CityCode('Kyoto')
 pref_code = j.pref_code
 city_code = j.city_code('kyoto')
 pt = jrn.PropTransactions(pref_code, city_code, 20223, 20224)
