@@ -15,6 +15,10 @@ j_realty_apiは、日本の国土交通省が出している[不動産取引価�
 - インストール方法
 
 ```sh
+pip install j_realty_api
+```
+
+```sh
 pip install git+https://github.com/mazarimono/j_realty_api.git
 ```
 
