@@ -21,8 +21,8 @@ dependencies = ["requests", "pandas"]
 [tool.setuptools]
 include-package-data = true
 
-[tool.setuptools.packages.find]
-where = ["j_realty_api/data"]
+[tool.setuptools.package-data]
+"*" = ["j_realty_api/data/*.json"]
 
 [project.urls]
 Repository = "https://github.com/mazarimono/j_realty_api"
