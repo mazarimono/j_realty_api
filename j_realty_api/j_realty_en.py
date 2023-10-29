@@ -2,6 +2,7 @@ import json
 import math
 from dataclasses import dataclass
 from typing import Union
+from datetime import datetime
 
 import numpy as np
 import pandas as pd
@@ -113,6 +114,9 @@ class PropTransactions:
         if r.status_code == 200:
             try:
                 df = pd.DataFrame(r.json()["data"])
+                df['Period'] = df['Period'].map(self.custom_to_datetime)
+                # for col in ['TradePrice']: # 'Area'は文字列のものが入っているので、対応を考えて追加する
+                #     df[col] = df[col].astype(int)
                 return df
             except KeyError:
                 print(f'''KeyError: The received JSON does not contain the expected "data" key.
@@ -121,6 +125,33 @@ class PropTransactions:
                       ''')
         else:
             raise Exception(f"Status_code: {r.status_code}")
+        
+
+    def custom_to_datetime(self, p_str):
+        split_str = p_str.split(' ')
+        year = int(split_str[2])
+        q = split_str[0]
+        if q == '1st':
+            qt = self.dt_to_qt(year, 2)
+            return qt
+        elif q == '2nd':
+            qt = self.dt_to_qt(year, 5)
+            return qt
+        elif q == '3rd':
+            qt = self.dt_to_qt(year, 8)
+            return qt
+        elif q == '4th':
+            qt = self.dt_to_qt(year, 11)
+            return qt
+        else:
+            raise ValueError(f'invalid quater: {p_str}')
+
+
+    def dt_to_qt(self, year, month):
+        dt = datetime(year, month, 1)
+        ts = pd.Timestamp(dt)
+        qt = ts.to_period('Q')
+        return qt
 
 
 if __name__ == "__main__":
