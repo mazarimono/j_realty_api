@@ -1,4 +1,3 @@
 pandas
 requests
-pkg_resources
 jpyforex
