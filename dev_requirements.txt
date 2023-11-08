@@ -5,3 +5,4 @@ mypy
 pytest
 build
 wheel
+setuptools
