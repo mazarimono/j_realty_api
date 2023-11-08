@@ -37,7 +37,8 @@ pref_code = j.pref_code
 city_code = j.city_code('kyoto')
 pt = jrn.PropTransactions(pref_code, city_code, 20223, 20224)
 df = pt.get_data()
-
+# Can get Prices with forex(USD, EUR, CNY) (from ver0.2)
+df_forex = pt.to_forex(df, 'USD')
 ```
 
 - 日本語

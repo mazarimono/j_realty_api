@@ -1,9 +1,10 @@
 ## 開発メモ
 
 
-### add-new-feature
+### ver0.2
 
-- お値段の通貨選択機能の追加を検討中。
+- add to_forex method to j_realty_en
+- 
 
 
 ### 20231020
