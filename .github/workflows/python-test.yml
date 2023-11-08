@@ -21,4 +21,4 @@ jobs:
             - name: code formatter
               run: |
                 isort .
-                black *
+                black j_realty_api/*.py

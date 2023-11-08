@@ -116,8 +116,8 @@ class PropTransactions:
             try:
                 df = pd.DataFrame(r.json()["data"])
                 df["Period"] = df["Period"].map(self.custom_to_datetime)
-                df['TradePrice'] = df['TradePrice'].astype("Int64")
-                df['UnitPrice'] = pd.to_numeric(df['UnitPrice'], errors='ignore')
+                df["TradePrice"] = df["TradePrice"].astype("Int64")
+                df["UnitPrice"] = pd.to_numeric(df["UnitPrice"], errors="ignore")
                 return df
             except KeyError:
                 print(
@@ -129,34 +129,34 @@ class PropTransactions:
         else:
             raise Exception(f"Status_code: {r.status_code}")
 
-
     def to_forex(self, df: pd.DataFrame, currency: str) -> pd.DataFrame:
-        '''
+        """
         Params:
             df: pd.DataFrame
                 DataFrame from get_data()
             currency: str
                 select from 3types: "USD", "EUR", "CNY"
-        
+
         Returns:
             pd.DataFrame
-        '''
-        dates = df['Period'].unique()
+        """
+        dates = df["Period"].unique()
         min_date = dates.min().to_timestamp().date()
-        max_date = dates.max().to_timestamp(how='End').date()
+        max_date = dates.max().to_timestamp(how="End").date()
         min_date_str = self.dt_to_string(min_date)
         max_date_str = self.dt_to_string(max_date)
-        cur = jpyforex.JPYForex(currency=currency, freq='Q', start_date=min_date_str, end_date=max_date_str)
+        cur = jpyforex.JPYForex(
+            currency=currency, freq="Q", start_date=min_date_str, end_date=max_date_str
+        )
         data = cur.get_data()
-        data.index = data.index.to_period('Q')
+        data.index = data.index.to_period("Q")
         forex_data = dict()
         for i in data.index:
             forex_data[i] = data.loc[i].values[0]
-        df['forex'] = df['Period'].map(forex_data)
-        df['ForexTradePrice'] = df.apply(lambda x: x['TradePrice'] / x['forex'], axis=1)
-        df['ForexUnitPrice'] = df.apply(lambda x: x['UnitPrice'] / x['forex'], axis=1)
+        df["forex"] = df["Period"].map(forex_data)
+        df["ForexTradePrice"] = df.apply(lambda x: x["TradePrice"] / x["forex"], axis=1)
+        df["ForexUnitPrice"] = df.apply(lambda x: x["UnitPrice"] / x["forex"], axis=1)
         return df
-
 
     def custom_to_datetime(self, p_str):
         split_str = p_str.split(" ")
@@ -177,19 +177,17 @@ class PropTransactions:
         else:
             raise ValueError(f"invalid quater: {p_str}")
 
-
     def dt_to_qt(self, year, month):
         dt = datetime(year, month, 1)
         ts = pd.Timestamp(dt)
         qt = ts.to_period("Q")
         return qt
 
-    
     def dt_to_string(self, dt: datetime) -> str:
         year = dt.year
         month = dt.month
         date = dt.day
-        str_dt = f'{year}{month:02}{date:02}'
+        str_dt = f"{year}{month:02}{date:02}"
         return str_dt
 
 
