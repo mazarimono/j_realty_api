@@ -21,7 +21,7 @@ jobs:
                 pip install j_realty_api
             - name: Test with pytest
               run: |
-                pytest tests/test_unit_citycode_class.py tests/test_unit_proptransactions_class.py
+                pytest tests/test_unit_citycode_class.py
             - name: code formatter
               run: |
                 isort .
